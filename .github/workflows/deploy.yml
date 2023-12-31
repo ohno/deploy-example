@@ -1,22 +1,28 @@
-on: push
-name: Deploy website on push
+name: deploy
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   deploy:
-    - name: Get latest code
-      uses: actions/checkout@v3
-    - name: Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: ${{ secrets.FTP_SERVER_DIR }}
-        local-dir: public_html/
-        protocol: ftps
-        exclude: |
-          **/.git*
-          **/.git*/**
-          **/node_modules/**
-          .gitignore
-          README.md
-          **.htaccess
+    name: ftp-upload
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          local-dir: public_html/
+          protocol: ftp
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            .gitignore
+            README.md
+            **.htaccess
