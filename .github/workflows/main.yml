@@ -2,7 +2,7 @@ name: sakura
 on:
   push:
     branches:
-      - main()
+      - main
 
 jobs:
   deploy:
